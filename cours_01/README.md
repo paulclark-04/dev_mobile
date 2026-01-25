@@ -1,16 +1,32 @@
-# cours_01
+# Cours 01 - Login Page Implementation
 
-Template 1er cours
+Ce projet est l'implémentation du **Cours 01** du module Développement Mobile (ECE).
+L'objectif est de créer une interface de connexion moderne en Flutter, structurée et conforme aux maquettes.
 
-## Getting Started
+## Structure du Projet
 
-This project is a starting point for a Flutter application.
+- **`lib/main.dart`** : Point d'entrée et Thème global.
+- **`lib/login/login_page.dart`** : Écran principal, assemble les widgets.
+- **`lib/widgets/`** : Composants réutilisables :
+  - `email_field_widget.dart` : Champ texte stylisé avec gestion du focus.
+  - `continue_button_widget.dart` : Structure du bouton principal (style basique).
+  - `or_separator_widget.dart` : Séparateur visuel.
+  - `continue_with_button_widget.dart` : Boutons "Social Auth" avec icônes SVG.
+- **`assets/`** : Contient les logos (Google, Facebook, Apple).
 
-A few resources to get you started if this is your first Flutter project:
+## Comment lancer le projet
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Le projet est configuré pour tourner sur Chrome (Web) ou Simulateur iOS/Android.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+# Récupérer les dépendances
+flutter pub get
+
+# Lancer sur Chrome
+flutter run -d chrome
+```
+
+## Vérification
+Le champ Email dispose d'un style actif/inactif :
+- **Inactif** : Bordure grise, hint text visible.
+- **Focus** : Bordure bleu-gris plus foncée, curseur actif.
