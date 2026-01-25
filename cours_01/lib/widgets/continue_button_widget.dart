@@ -7,7 +7,6 @@ class ContinueButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Minimal implementation as requested - styling to be added later
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
