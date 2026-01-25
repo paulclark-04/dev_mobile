@@ -1,4 +1,4 @@
-# Cours 01 - Login Page Implementation
+# Cours 01
 
 Ce projet est l'implémentation du **Cours 01** du module Développement Mobile (ECE).
 L'objectif est de créer une interface de connexion moderne en Flutter, structurée et conforme aux maquettes.
