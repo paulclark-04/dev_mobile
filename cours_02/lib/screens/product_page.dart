@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:formation_flutter/l10n/app_localizations.dart';
 import 'package:formation_flutter/model/product.dart';
+import 'package:formation_flutter/model/product_inherited_widget.dart';
 import 'package:formation_flutter/res/app_colors.dart';
 import 'package:formation_flutter/res/app_icons.dart';
 import 'package:formation_flutter/res/app_theme_extension.dart';
@@ -12,6 +13,8 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final product = ProductInheritedWidget.of(context).data;
+    
     return Scaffold(
       body: SizedBox.expand(
         child: Stack(
@@ -22,7 +25,7 @@ class ProductPage extends StatelessWidget {
               end: 0.0,
               height: IMAGE_HEIGHT,
               child: Image.network(
-                'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?q=80&w=1310&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                product.picture ?? 'https://via.placeholder.com/400',
                 fit: BoxFit.cover,
                 cacheHeight:
                     (IMAGE_HEIGHT * MediaQuery.devicePixelRatioOf(context))
@@ -46,14 +49,17 @@ class ProductPage extends StatelessWidget {
                   vertical: 30.0,
                 ),
                 child: Column(
-                  crossAxisAlignment: .start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Petits pois et carottes',
+                      product.name ?? 'Unknown Product',
                       style: context.theme.title1,
                     ),
-                    Text('Cassegrain', style: context.theme.title2),
-                    Scores(),
+                    Text(
+                      product.brands?.join(', ') ?? 'Unknown Brand',
+                      style: context.theme.title2,
+                    ),
+                    Scores(product: product),
                   ],
                 ),
               ),
@@ -66,7 +72,9 @@ class ProductPage extends StatelessWidget {
 }
 
 class Scores extends StatelessWidget {
-  const Scores({super.key});
+  final Product product;
+  
+  const Scores({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -74,22 +82,28 @@ class Scores extends StatelessWidget {
       children: [
         IntrinsicHeight(
           child: Row(
-            crossAxisAlignment: .start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 flex: 44,
-                child: _Nutriscore(nutriscore: ProductNutriScore.B),
+                child: _Nutriscore(
+                  nutriscore: product.nutriScore ?? ProductNutriScore.unknown,
+                ),
               ),
               VerticalDivider(),
               Expanded(
                 flex: 56,
-                child: _NovaGroup(novaScore: ProductNovaScore.group4),
+                child: _NovaGroup(
+                  novaScore: product.novaScore ?? ProductNovaScore.unknown,
+                ),
               ),
             ],
           ),
         ),
         Divider(),
-        _GreenScore(greenScore: ProductGreenScore.A),
+        _GreenScore(
+          greenScore: product.greenScore ?? ProductGreenScore.unknown,
+        ),
       ],
     );
   }
