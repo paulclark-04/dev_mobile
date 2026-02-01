@@ -1,76 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:formation_flutter/l10n/app_localizations.dart';
 import 'package:formation_flutter/model/product.dart';
-import 'package:formation_flutter/model/product_inherited_widget.dart';
+import 'package:formation_flutter/model/product_notifier.dart';
 import 'package:formation_flutter/res/app_colors.dart';
 import 'package:formation_flutter/res/app_icons.dart';
 import 'package:formation_flutter/res/app_theme_extension.dart';
+import 'package:provider/provider.dart';
 
+/// Page principale qui affiche les détails d'un produit.
+/// Utilise ChangeNotifierProvider pour la gestion d'état.
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
 
-  static const double IMAGE_HEIGHT = 300.0;
-
   @override
   Widget build(BuildContext context) {
-    final product = ProductInheritedWidget.of(context).data;
-    
-    return Scaffold(
-      body: SizedBox.expand(
-        child: Stack(
-          children: [
-            PositionedDirectional(
-              top: 0.0,
-              start: 0.0,
-              end: 0.0,
-              height: IMAGE_HEIGHT,
-              child: Image.network(
-                product.picture ?? 'https://via.placeholder.com/400',
-                fit: BoxFit.cover,
-                cacheHeight:
-                    (IMAGE_HEIGHT * MediaQuery.devicePixelRatioOf(context))
-                        .toInt(),
-              ),
-            ),
-            PositionedDirectional(
-              top: IMAGE_HEIGHT - 16.0,
-              start: 0.0,
-              end: 0.0,
-              bottom: 0.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(16.0),
-                  ),
-                  color: Colors.white,
-                ),
-                padding: EdgeInsetsDirectional.symmetric(
-                  horizontal: 20.0,
-                  vertical: 30.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.name ?? 'Unknown Product',
-                      style: context.theme.title1,
-                    ),
-                    Text(
-                      product.brands?.join(', ') ?? 'Unknown Brand',
-                      style: context.theme.title2,
-                    ),
-                    Scores(product: product),
-                  ],
-                ),
-              ),
-            ),
-          ],
+    return ChangeNotifierProvider(
+      create: (_) => ProductNotifier(),
+      child: Scaffold(
+        body: Consumer<ProductNotifier>(
+          builder: (context, notifier, child) {
+            final product = notifier.product;
+            
+            // Si le produit est null, on affiche le chargement
+            if (product == null) {
+              return const ProductLoadingView();
+            }
+            
+            // Sinon, on affiche le contenu
+            return ProductContentView(product: product);
+          },
         ),
       ),
     );
   }
 }
 
+/// Vue affichée pendant le chargement du produit.
+/// Affiche un indicateur de progression centré.
+class ProductLoadingView extends StatelessWidget {
+  const ProductLoadingView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+/// Vue affichée quand le produit est chargé.
+/// Contient l'image, le nom, la marque et les scores.
+class ProductContentView extends StatelessWidget {
+  final Product product;
+  
+  static const double IMAGE_HEIGHT = 300.0;
+
+  const ProductContentView({super.key, required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: Stack(
+        children: [
+          // Image du produit en arrière-plan
+          PositionedDirectional(
+            top: 0.0,
+            start: 0.0,
+            end: 0.0,
+            height: IMAGE_HEIGHT,
+            child: Image.network(
+              product.picture ?? 'https://via.placeholder.com/400',
+              fit: BoxFit.cover,
+              cacheHeight:
+                  (IMAGE_HEIGHT * MediaQuery.devicePixelRatioOf(context))
+                      .toInt(),
+            ),
+          ),
+          // Carte avec les informations produit
+          PositionedDirectional(
+            top: IMAGE_HEIGHT - 16.0,
+            start: 0.0,
+            end: 0.0,
+            bottom: 0.0,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(16.0),
+                ),
+                color: Colors.white,
+              ),
+              padding: EdgeInsetsDirectional.symmetric(
+                horizontal: 20.0,
+                vertical: 30.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Nom du produit
+                  Text(
+                    product.name ?? 'Produit inconnu',
+                    style: context.theme.title1,
+                  ),
+                  // Marque(s) du produit
+                  Text(
+                    product.brands?.join(', ') ?? 'Marque inconnue',
+                    style: context.theme.title2,
+                  ),
+                  // Scores nutritionnels et environnementaux
+                  Scores(product: product),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Widget qui affiche les différents scores du produit.
 class Scores extends StatelessWidget {
   final Product product;
   
@@ -245,19 +293,5 @@ class _GreenScore extends StatelessWidget {
       ProductGreenScore.F => 'Impact environnemental très élevé',
       ProductGreenScore.unknown => 'Score non calculé',
     };
-  }
-}
-
-class Test extends StatefulWidget {
-  const Test({super.key});
-
-  @override
-  State<Test> createState() => _TestState();
-}
-
-class _TestState extends State<Test> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }
