@@ -7,6 +7,7 @@
       "name": "formation_flutter",
       "version": "1.0.0+1",
       "dependencies": [
+        "dio",
         "flutter",
         "flutter_localizations",
         "flutter_svg",
@@ -41,6 +42,15 @@
         "stream_channel",
         "test_api",
         "vector_math"
+      ]
+    },
+    {
+      "name": "provider",
+      "version": "6.1.5+1",
+      "dependencies": [
+        "collection",
+        "flutter",
+        "nested"
       ]
     },
     {
@@ -171,6 +181,13 @@
         "stream_channel",
         "string_scanner",
         "term_glyph"
+      ]
+    },
+    {
+      "name": "nested",
+      "version": "1.0.0",
+      "dependencies": [
+        "flutter"
       ]
     },
     {
@@ -341,20 +358,32 @@
       ]
     },
     {
-      "name": "provider",
-      "version": "6.1.5+1",
+      "name": "dio",
+      "version": "5.9.1",
       "dependencies": [
+        "async",
         "collection",
-        "flutter",
-        "nested"
+        "dio_web_adapter",
+        "http_parser",
+        "meta",
+        "mime",
+        "path"
       ]
     },
     {
-      "name": "nested",
-      "version": "1.0.0",
+      "name": "dio_web_adapter",
+      "version": "2.1.1",
       "dependencies": [
-        "flutter"
+        "dio",
+        "http_parser",
+        "meta",
+        "web"
       ]
+    },
+    {
+      "name": "mime",
+      "version": "2.0.0",
+      "dependencies": []
     }
   ],
   "configVersion": 1
